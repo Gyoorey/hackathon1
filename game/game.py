@@ -100,7 +100,7 @@ class Game:
         # change speed if needed
         if (self.iter_cnt % 50) == 0:
             self.ast_thresh -= 0.1
-            self.ast_speed += 5
+            #self.ast_speed += 5
         # incr. iter_cnt
         self.iter_cnt += 1
         return (self.iter_cnt, self.ended)
