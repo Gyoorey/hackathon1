@@ -16,7 +16,7 @@ import random
 xor_inputs = [(0.0, 0.0, 1.0, 0.5, 0.1, -1.0), (1.0, 1.0, 1.0, 0.4, 0.0, -0.9)]
 xor_outputs = [(0.0,1.0,0.0),     (1.0,0.0,0.0)]
 
-def eval_genomes(genomes, config):
+def evnal_genomes(genomes, config):
     for genome_id, genome in genomes:
         genome.fitness = 6.0 #random.uniform(0, 100)
         net = neat.nn.FeedForwardNetwork.create(genome, config)
