@@ -22,6 +22,9 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
 p = neat.Population(config)
 
 for generation in range(1000):
+
+    buffer = "steps\\gen%d.txt" % (generation+1)
+    file = open(buffer, 'w')
     max_fit = 0;
 
     genomes = list(iteritems(p.population));
@@ -32,17 +35,18 @@ for generation in range(1000):
 
         g = Game()
         genome.fitness = 10000
+        output_vec = []
         for iter in range(10000):
             xi = g.generateOutput()
             xi = tuple(xi[0])
             #print(xi)
             output = net.activate(xi)
-
             action = np.argmax(output) - 1
+            output_vec.append(action)
             #print(action, end=';')
 
             (fitness, ended) = g.iterate(action)
-            #print("iteration %d" % iter )
+
             #print(game.generateOutput())
             #game.show()ss
             if ended:
@@ -51,12 +55,18 @@ for generation in range(1000):
                 #print(fitness)
                 if fitness > max_fit:
                     max_fit = fitness
+                    output_vec_max_fit = output_vec;
                 break
             #delay(100)
         #g.exit()
 
     print("generation: %d " % generation)
     print("max fitness: %f " % max_fit)
+    for i in output_vec_max_fit:
+        #print(i, end=';')
+        file.write("%d;" % i)
+    file.write('\n')
+    file.flush()
 
     #genomes = list(iteritems(p.population));
     #for genome_id, genome in genomes:
@@ -84,3 +94,5 @@ for generation in range(1000):
     p.reporters.end_generation(p.config, p.population, p.species)
 
     p.generation += 1
+
+
