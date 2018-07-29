@@ -25,6 +25,11 @@ neat/iznn/__init__.py
 neat/nn/__init__.py
 neat/nn/feed_forward.py
 neat/nn/recurrent.py
+neat/ctrnn/__init__.py
+neat/iznn/__init__.py
+neat/nn/__init__.py
+neat/nn/feed_forward.py
+neat/nn/recurrent.py
 neat_python.egg-info/PKG-INFO
 neat_python.egg-info/SOURCES.txt
 neat_python.egg-info/dependency_links.txt
