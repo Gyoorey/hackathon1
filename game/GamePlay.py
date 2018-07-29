@@ -1,7 +1,8 @@
 import turtle
 import numpy as np
 import random
-import time
+import numpy as np
+import os
 
 H = 600
 W = 800
@@ -12,12 +13,16 @@ playerwidth = 50
 
 wn = turtle.Screen()
 wn.setup(W + 20, H + 20)
-wn.bgcolor("pink")
+wn.bgcolor("black")
 wn.title("Hackathon Invaders")
+
+wn.register_shape('ship.gif')
+wn.register_shape('ghost.gif')
 
 class GameArea():
     def __init__(self):
         self.border_pen = turtle.Turtle()
+        self.border_pen.color('white')
         self.border_pen.speed(0)
         self.border_pen.penup()
         self.border_pen.setposition(-W / 2, H / 2)
@@ -44,7 +49,7 @@ class Asteroids(turtle.Turtle):
     def drawAsteroids(self, a, b):
         self.hideturtle()
         self.color("red")
-        self.shape("circle")
+        self.shape("ghost.gif")
         self.penup()
         self.speed(0)
         # self.showturtle()
@@ -67,7 +72,7 @@ class Ship(turtle.Turtle):
 
     def drawShip(self):
         self.color("black")
-        self.shape("triangle")
+        self.shape("ship.gif")
         self.penup()
         self.speed(0)
         self.setposition(self.x, player_y)
@@ -128,13 +133,12 @@ class Ship(turtle.Turtle):
         out[0][41] = (self.x * 2) / W
         return out
 
-asterlist = []
-
 def showState():
     ship.drawShip()
-
+    asterlist = []
     for asteroid in ship.asteroids:
         aster = Asteroids()
+        aster.hideturtle()
         aster.drawAsteroids(asteroid[0], asteroid[1])
         # time.sleep(1)
         asterlist.append(aster)
@@ -142,21 +146,52 @@ def showState():
         # aster.hideturtle()
         # move(aster, asteroid[0], asteroid[1])
     for a in asterlist:
+        a.hideturtle()
         a.reset()
+        a.hideturtle()
 
 gameArea = GameArea()
 ship = Ship()
 
 
-for iter in range(200):
-    (fitness, ended) = ship.iterate(-1)
+tmpfile = os.path.join('.', 'tmp.svg')  # name of file to save SVG to
+
+buffer = "./steps/gen%d.txt" % (6)
+file = open(buffer, 'r')
+a = file.read()
+print(len(a))
+
+for iter in range(len(a)):
+    # print(iter)
+    # aa = np.int(a.split(';')[iter])
+    aa = a.split(';')[iter]
+    # print(type(int(aa)))
+    # print(aa)
+    aaa = int(aa)
+    # print(isinstance(aaa, int))
+    # print(np.int(a.split(';')[iter]))
+    (fitness, ended) = ship.iterate(aaa)
     # ship.move()
     showState()
+    # canv = wn.getcanvas()
+    # ts = wn.getscreen()
+    # a = "teszt" + str(iter)
+    # ts = turtle.getscreen()
+
+    # img = Image.open('teszt0.eps')
+    wn.update()
+    # canvas = wn.getcanvas()
+    # canvas.postscript(file = str(a) + '.eps')
+    # img.show
+    # wn.reset()
+    # wn.update()
+    # time.sleep(1)
+    # img.save('ez.png')
     print("iteration %d" % iter)
     # print(ship.x)
     # print(ship.generateOutput())
     # game.show()
-    if ended:
-        break
+    # if ended:
+    #     break
 
 exit()
