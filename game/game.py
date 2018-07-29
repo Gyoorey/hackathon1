@@ -51,6 +51,18 @@ class Game:
         #cv2.destroyAllWindows()
         return img
     
+    def processLogfile(self, genNum):
+        log_filename = 'steps\gen%d.txt'%genNum
+        print('Processing: %s'%log_filename)
+        file = open(log_filename, "r")
+        seqString = file.readline()
+        #print(seqString)
+        nums_as_strings = seqString.split(";")
+        nums = [int(n) for n in nums_as_strings[:-1]]
+        #print(nums)
+        video_name = 'steps\gen%d.avi'%genNum
+        self.animateSeq(nums,video_name)
+    
     def animateSeq(self, seq, filename):
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         out = cv2.VideoWriter(filename,fourcc, 10.0, (W,H))
@@ -75,7 +87,7 @@ class Game:
             self.asteroids[i][1] = self.asteroids[i][1] - self.ast_speed
         # check collision
         for asteroid in self.asteroids:
-            if self.col == asteroid[0] and asteroid[1] <= player_y + playerwidth:
+            if abs(self.col - asteroid[0])<3 and asteroid[1] <= player_y + playerwidth:
                 self.ended = True
                 return (self.iter_cnt, self.ended)
                 # kill the game
@@ -93,7 +105,7 @@ class Game:
         # print(self.asteroids)
         # generate asteroids
         if self.r.uniform(0,1) > self.ast_thresh:
-            temp_col = self.r.randint(0,num_of_cols)
+            temp_col = self.r.randint(0,num_of_cols-1)
             self.asteroids.append([temp_col, H])
         # change speed if needed
         if (self.iter_cnt % 100) == 0:
